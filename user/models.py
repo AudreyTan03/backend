@@ -23,7 +23,7 @@ def upload_profile_image_path(instance, filename):
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, name, password=None, is_instructor=False, is_student=False, is_active=False, is_staff=False,):
+    def create_user(self, email, name, password=None, is_instructor=False, is_student=False, is_active=False, is_staff=False, admin=False):
         """
         Creates and saves a User with the given email, name, and password.
         """
@@ -63,9 +63,9 @@ class UserManager(BaseUserManager):
             name=name,
             is_instructor=True, 
             is_staff=True,
-            is_admin=True, # Superusers are considered instructors
+            admin=True, # Superusers are considered instructors
         )
-        user.is_admin = True
+        user.admin = True
         user.save(using=self._db)
         return user
 

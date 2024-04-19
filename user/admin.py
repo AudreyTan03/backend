@@ -6,12 +6,12 @@ from user.models import UserPreference
 
 class UserModelAdmin(BaseUserAdmin):
     # The fields to be used in displaying the User model.
-    list_display = ["id" , "email", "name", "is_student", "is_instructor", "is_active", "is_admin"]  # Add 'is_student' and 'is_instructor' to list_display
-    list_filter = ["is_admin", "is_active", "is_student", "is_instructor"]  # Add 'is_student' and 'is_instructor' to list_filter
+    list_display = ["id" , "email", "name", "is_student", "is_instructor", "is_active", "admin"]  # Add 'is_student' and 'is_instructor' to list_display
+    list_filter = ["staff","admin", "is_active", "is_student", "is_instructor"]  # Add 'is_student' and 'is_instructor' to list_filter
     fieldsets = [
         ("User Credentials", {"fields": ["email", "password"]}),
         ("Personal info", {"fields": ["name"]}),
-        ("Permissions", {"fields": ["is_admin", "is_active", "is_student", "is_instructor"]}),  # Add 'is_student' and 'is_instructor' to fieldsets
+        ("Permissions", {"fields": ["admin", "is_active", "is_student", "is_instructor"]}),  # Add 'is_student' and 'is_instructor' to fieldsets
     ]
     # add_fieldsets is not a standard ModelAdmin attribute. UserModelAdmin
     # overrides get_fieldsets to use this attribute when creating a user.
@@ -20,7 +20,7 @@ class UserModelAdmin(BaseUserAdmin):
             None,
             {
                 "classes": ["wide"],
-                "fields": ["email", "name", "password1", "password2", "is_admin", "is_active", "is_student", "is_instructor"],  # Add 'is_student' and 'is_instructor' to add_fieldsets
+                "fields": ["email", "name", "password1", "password2", "admin", "is_active", "is_student", "is_instructor"],  # Add 'is_student' and 'is_instructor' to add_fieldsets
             },
         ),
     ]
