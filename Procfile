@@ -1,1 +1,1 @@
-web: gunicorn revil01.wsgi
+web: gunicorn backend.wsgi
