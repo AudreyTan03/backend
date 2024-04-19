@@ -23,7 +23,7 @@ def upload_profile_image_path(instance, filename):
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, name, password=None, is_instructor=False, is_student=False):
+    def create_user(self, email, name, password=None, is_instructor=False, is_student=False, is_active=False, is_staff=False,):
         """
         Creates and saves a User with the given email, name, and password.
         """
@@ -61,7 +61,9 @@ class UserManager(BaseUserManager):
             email,
             password=password,
             name=name,
-            is_instructor=True,  # Superusers are considered instructors
+            is_instructor=True, 
+            is_staff=True,
+            is_admin=True, # Superusers are considered instructors
         )
         user.is_admin = True
         user.save(using=self._db)
@@ -76,7 +78,8 @@ class User(AbstractBaseUser):
     )
     name = models.CharField(max_length=200)
     is_active = models.BooleanField(default=False)
-    is_admin = models.BooleanField(default=False)
+    admin = models.BooleanField(default=False)
+    staff = models.BooleanField(default=False)
     is_instructor = models.BooleanField(default=False)
     is_student = models.BooleanField(default=False)  # New field to differentiate between students
     created_at = models.DateTimeField(auto_now_add=True)
@@ -115,7 +118,11 @@ class User(AbstractBaseUser):
     def is_staff(self):
         "Is the user a member of staff?"
         # Simplest possible answer: All admins are staff
-        return self.is_admin
+        return self.staff
+    
+    @property
+    def is_admin(self):
+        return self.admin
 
 
 class OTP(models.Model):
