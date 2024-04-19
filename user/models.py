@@ -23,7 +23,7 @@ def upload_profile_image_path(instance, filename):
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, name, password=None, is_instructor=False, is_student=False, is_active=False, is_staff=False, admin=False):
+    def create_user(self, email, name, password=None, is_instructor=False, is_student=False, is_active=False, is_staff=False, is_admin=False):
         """
         Creates and saves a User with the given email, name, and password.
         """
@@ -32,10 +32,13 @@ class UserManager(BaseUserManager):
 
         user = self.model(
             email=self.normalize_email(email),
-            name=name,
-            is_instructor=is_instructor,
-            is_student=is_student,
         )
+        user.name = name
+        user.is_student=is_student
+        user.is_instructor=is_instructor
+        user.is_active = is_active
+        user.staff = is_staff
+        user.admin = is_admin
 
         user.set_password(password)
         user.save(using=self._db)
@@ -52,6 +55,17 @@ class UserManager(BaseUserManager):
         Creates and saves an instructor user with the given email and name.
         """
         return self.create_user(email, name, password=password, is_instructor=True)
+    
+    def create_staff(self, email, name, password=None):
+        user = self.create_user(
+            email,
+            password=password,
+            name=name,
+            is_staff=True,
+            is_active=True
+        )
+
+        return user
 
     def create_superuser(self, email, name, password=None):
         """
@@ -61,11 +75,12 @@ class UserManager(BaseUserManager):
             email,
             password=password,
             name=name,
+            is_active=True,
             is_instructor=True, 
             is_staff=True,
-            admin=True, # Superusers are considered instructors
+            is_admin=True, # Superusers are considered instructors
         )
-        user.admin = True
+        # user.admin = True
         user.save(using=self._db)
         return user
 
@@ -105,7 +120,7 @@ class User(AbstractBaseUser):
     def has_perm(self, perm, obj=None):
         "Does the user have a specific permission?"
         # Simplest possible answer: Yes, always
-        return self.is_admin
+        return True
     
     
 
@@ -149,7 +164,7 @@ class UserPreference(models.Model):
         return f"{self.user.name}'s Preference"
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     image = models.ImageField(upload_to=upload_profile_image_path, default='default.jpg')
     name = models.CharField(max_length=200)
     bio = models.TextField(blank=True, null=True)
@@ -169,11 +184,6 @@ def create_or_update_user_profile(sender, instance, created, **kwargs):
 
         # Create a UserPreference instance with the default theme for the new user
         UserPreference.objects.create(user=instance)
-    else:
-        # Existing user; update profile and preferences if needed
-        if instance.profile:
-            instance.profile.name = instance.name  # Assuming you want to update the profile name to the user's username
-            instance.profile.save()
 
 
   
