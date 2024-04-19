@@ -164,7 +164,7 @@ class UserPreference(models.Model):
         return f"{self.user.name}'s Preference"
 
 class Profile(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(upload_to=upload_profile_image_path, default='default.jpg')
     name = models.CharField(max_length=200)
     bio = models.TextField(blank=True, null=True)
