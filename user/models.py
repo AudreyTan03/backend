@@ -193,10 +193,6 @@ def create_or_update_user_profile(sender, instance, created, **kwargs):
 #         Profile.objects.create(user=instance)
 #     else:
 #         instance.profile.save()
-
-
-
-
 from django.core.mail import send_mail
 from django.conf import settings
 
@@ -217,5 +213,3 @@ class ContactMessage(models.Model):
             [settings.CONTACT_EMAIL],
             fail_silently=False,
         )
-
-
