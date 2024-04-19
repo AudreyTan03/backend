@@ -174,11 +174,7 @@ SIMPLE_JWT = {
 
 }
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    'https://revill01-e38d1bc729a5.herokuapp.com/',
-]
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Password reset timeout in seconds
 PASSWORD_RESET_TIMEOUT = 900  # 900 seconds = 15 minutes
