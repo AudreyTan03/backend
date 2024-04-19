@@ -209,29 +209,4 @@ class ContactMessage(models.Model):
         )
 
 
-from django.core.mail import send_mail
-from django.conf import settings
-
-class ContactMessage(models.Model):
-    
-    name = models.CharField(max_length=100)
-    email = models.EmailField()
-    message = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    replied_message = models.TextField(blank=True, null=True)
-
-
-    def __str__(self):
-        return self.name
-
-    def send_email(self):
-        send_mail(
-            'New Contact Message',
-            f'Name: {self.name}\nEmail: {self.email}\nMessage: {self.message}',
-            settings.EMAIL_HOST_USER,
-            [settings.CONTACT_EMAIL],
-            fail_silently=False,
-        )
-
-
 
