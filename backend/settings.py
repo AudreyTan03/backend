@@ -129,8 +129,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static_my_project", BASE_DIR / "templates"/ "build"]
 
-STATIC_ROOT = os.path.join(BASE_DIR, "static_cdn", "static_root")
-MEDIA_ROOT = os.path.join(BASE_DIR, "static_cdn", "media_root")
+STATIC_ROOT = os.path.join(BASE_DIR, "static", "static_root")
+MEDIA_ROOT = os.path.join(BASE_DIR, "static", "media_root")
 MEDIA_URL = '/media/'
 
 # Default primary key field type
@@ -177,6 +177,7 @@ SIMPLE_JWT = {
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    'https://revill01-e38d1bc729a5.herokuapp.com/',
 ]
 
 # Password reset timeout in seconds
